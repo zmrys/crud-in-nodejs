@@ -18,7 +18,12 @@ const limiter = rateLimit({
   message: warningMessage,
 });
 
+//Limit requets from same IP
 app.use('/api', limiter);
+
+//Body parser,readind data from body into req.body
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 //Handling undefined routes
 app.all('*', (req, res, next) => {
