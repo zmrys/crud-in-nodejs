@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan'); //logging middleware
-const rateLimit = require('express-rate-limit');
+const rateLimit = require('express-rate-limit'); // to block brute force attack
+const cookieParser = require('cookie-parser'); // to parse cookie from incoming request
 
 const app = express();
 
@@ -24,6 +25,9 @@ app.use('/api', limiter);
 //Body parser,readind data from body into req.body
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
+//Cookie parser
+app.use(cookieParser());
 
 //Handling undefined routes
 app.all('*', (req, res, next) => {
