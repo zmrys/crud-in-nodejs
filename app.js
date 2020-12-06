@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan'); //logging middleware
 const rateLimit = require('express-rate-limit'); // to block brute force attack
 const cookieParser = require('cookie-parser'); // to parse cookie from incoming request
+const xss = require('xss-clean'); //Data sanitization against XSS
 
 const app = express();
 
@@ -28,6 +29,9 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 //Cookie parser
 app.use(cookieParser());
+
+//Data sanitization against XSS
+app.use(xss());
 
 //Handling undefined routes
 app.all('*', (req, res, next) => {
