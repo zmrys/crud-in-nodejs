@@ -3,6 +3,9 @@ const morgan = require('morgan'); //logging middleware
 const rateLimit = require('express-rate-limit'); // to block brute force attack
 const cookieParser = require('cookie-parser'); // to parse cookie from incoming request
 const xss = require('xss-clean'); //Data sanitization against XSS
+const compression = require('compression');
+const mongoSanitizer = require('express-mongo-sanitize');
+const cors = require('cors');
 
 const app = express();
 
@@ -32,6 +35,15 @@ app.use(cookieParser());
 
 //Data sanitization against XSS
 app.use(xss());
+
+//Data sanitization against NoSQL query injection
+app.use(mongoSanitizer());
+
+//to compress size of response
+app.use(compression());
+
+//cors for cross origin resource requests
+app.use(cors());
 
 //Handling undefined routes
 app.all('*', (req, res, next) => {
